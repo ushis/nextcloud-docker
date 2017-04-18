@@ -1,0 +1,29 @@
+---
+sudo: false
+
+services:
+  - docker
+
+script:
+  - docker build -t nextcloud .
+
+before_deploy:
+  - if test -n "${TRAVIS_TAG}"; then
+      docker tag nextcloud "ushi/nextcloud:${TRAVIS_TAG}";
+    else
+      docker tag nextcloud "ushi/nextcloud:latest";
+    fi
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: docker push "ushi/nextcloud:${TRAVIS_TAG}"
+    on:
+      tags: true
+
+  - provider: script
+    skip_cleanup: true
+    script: docker push "ushi/nextcloud:latest"
+    on:
+      branch: master
