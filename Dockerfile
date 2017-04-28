@@ -25,7 +25,7 @@ RUN apk add --no-cache \
   php5-zip \
   php5-zlib
 
-RUN curl -L https://download.nextcloud.com/server/releases/nextcloud-11.0.2.tar.bz2 | \
+RUN curl -L https://download.nextcloud.com/server/releases/nextcloud-11.0.3.tar.bz2 | \
     tar -C /srv -xjf - && \
   chown -R root:www-data /srv/nextcloud && \
   find /srv/nextcloud -type d -exec chmod 0750 {} \; && \
