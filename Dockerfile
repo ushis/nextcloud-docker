@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:3.6
 
 # Hack to work around a bug (?) in iconv
 #
@@ -13,28 +13,35 @@ RUN apk add --no-cache \
   apache2 \
   ca-certificates \
   curl \
-  php5-apache2 \
-  php5-apcu \
-  php5-bz2 \
-  php5-ctype \
-  php5-curl \
-  php5-dom \
-  php5-gd \
-  php5-iconv \
-  php5-intl \
-  php5-json \
-  php5-ldap \
-  php5-mcrypt \
-  php5-opcache \
-  php5-openssl \
-  php5-pdo \
-  php5-pdo_pgsql \
-  php5-pgsql \
-  php5-posix \
-  php5-xml \
-  php5-xmlreader \
-  php5-zip \
-  php5-zlib
+  php7 \
+  php7-apache2 \
+  php7-apcu \
+  php7-bz2 \
+  php7-ctype \
+  php7-curl \
+  php7-dom \
+  php7-fileinfo \
+  php7-gd \
+  php7-iconv \
+  php7-intl \
+  php7-json \
+  php7-ldap \
+  php7-mbstring \
+  php7-mcrypt \
+  php7-opcache \
+  php7-openssl \
+  php7-pcntl \
+  php7-pdo \
+  php7-pdo_pgsql \
+  php7-pgsql \
+  php7-posix \
+  php7-session \
+  php7-simplexml \
+  php7-xml \
+  php7-xmlreader \
+  php7-xmlwriter \
+  php7-zip \
+  php7-zlib
 
 RUN curl -L https://download.nextcloud.com/server/releases/nextcloud-12.0.0.tar.bz2 | \
     tar -C /srv -xjf -
@@ -51,7 +58,7 @@ RUN mkdir -p /srv/nextcloud/data && \
   chown -R apache:apache /srv/nextcloud/data
 
 COPY httpd.conf /etc/apache2/conf.d/overrides.conf
-COPY opcache.ini /etc/php5/conf.d/opcache_settings.ini
+COPY opcache.ini /etc/php7/conf.d/opcache_settings.ini
 
 WORKDIR /srv/nextcloud
 
