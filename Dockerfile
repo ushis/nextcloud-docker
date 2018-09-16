@@ -13,6 +13,7 @@ RUN apk add --no-cache \
   apache2 \
   ca-certificates \
   curl \
+  openssl \
   php7 \
   php7-apache2 \
   php7-apcu \
@@ -43,7 +44,7 @@ RUN apk add --no-cache \
   php7-zip \
   php7-zlib
 
-RUN curl -L https://download.nextcloud.com/server/releases/nextcloud-13.0.5.tar.bz2 | \
+RUN curl -L https://download.nextcloud.com/server/releases/nextcloud-14.0.0.tar.bz2 | \
   tar -C /srv -xjf -
 
 COPY config/* /srv/nextcloud/config/
