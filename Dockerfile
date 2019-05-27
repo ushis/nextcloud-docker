@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.9
 
 # Hack to work around a bug (?) in iconv
 #
