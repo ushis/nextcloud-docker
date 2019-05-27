@@ -1,10 +1,10 @@
-FROM alpine:3.6
+FROM alpine:3.9
 
 # Hack to work around a bug (?) in iconv
 #
 # See https://github.com/docker-library/php/issues/240#issuecomment-305038173
 RUN apk add --no-cache \
-  --repository http://dl-3.alpinelinux.org/alpine/edge/testing \
+  --repository http://dl-3.alpinelinux.org/alpine/edge/community \
   gnu-libiconv
 
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
@@ -44,7 +44,7 @@ RUN apk add --no-cache \
   php7-zip \
   php7-zlib
 
-RUN curl -L https://download.nextcloud.com/server/releases/nextcloud-15.0.0.tar.bz2 | \
+RUN curl -L https://download.nextcloud.com/server/releases/nextcloud-16.0.1.tar.bz2 | \
   tar -C /srv -xjf -
 
 COPY config/* /srv/nextcloud/config/
