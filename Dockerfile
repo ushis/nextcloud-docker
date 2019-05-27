@@ -44,7 +44,7 @@ RUN apk add --no-cache \
   php7-zip \
   php7-zlib
 
-RUN curl -L https://download.nextcloud.com/server/releases/nextcloud-15.0.0.tar.bz2 | \
+RUN curl -L https://download.nextcloud.com/server/releases/nextcloud-16.0.1.tar.bz2 | \
   tar -C /srv -xjf -
 
 COPY config/* /srv/nextcloud/config/
