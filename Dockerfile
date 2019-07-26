@@ -34,6 +34,7 @@ RUN apk add --no-cache \
   php7-pcntl \
   php7-pdo \
   php7-pdo_pgsql \
+  php7-pecl-imagick \
   php7-pgsql \
   php7-posix \
   php7-session \
@@ -59,6 +60,7 @@ RUN mkdir -p /srv/nextcloud/data && \
   chown -R apache:apache /srv/nextcloud/data
 
 COPY httpd.conf /etc/apache2/conf.d/overrides.conf
+COPY memory.ini /etc/php7/conf.d/memory_settings.ini
 COPY opcache.ini /etc/php7/conf.d/opcache_settings.ini
 
 WORKDIR /srv/nextcloud
