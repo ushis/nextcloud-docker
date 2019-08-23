@@ -1,11 +1,15 @@
 ---
 sudo: false
 
+env:
+  global:
+    - NEXTCLOUD_VERSION="$(<version)"
+
 services:
   - docker
 
 script:
-  - docker build -t nextcloud .
+  - docker build --build-arg "NEXTCLOUD_VERSION=${NEXTCLOUD_VERSION}" -t nextcloud .
 
 before_deploy:
   - if test -n "${TRAVIS_TAG}"; then

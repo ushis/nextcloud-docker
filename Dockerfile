@@ -3,7 +3,8 @@ FROM alpine:3.10
 # Hack to work around a bug (?) in iconv
 #
 # See https://github.com/docker-library/php/issues/240#issuecomment-305038173
-RUN apk add --no-cache \
+RUN apk add \
+  --no-cache \
   --repository http://dl-3.alpinelinux.org/alpine/edge/community \
   gnu-libiconv
 
@@ -45,8 +46,21 @@ RUN apk add --no-cache \
   php7-zip \
   php7-zlib
 
-RUN curl -L https://download.nextcloud.com/server/releases/nextcloud-16.0.4.tar.bz2 | \
-  tar -C /srv -xjf -
+COPY httpd.conf /etc/apache2/conf.d/overrides.conf
+COPY memory.ini /etc/php7/conf.d/memory_settings.ini
+COPY opcache.ini /etc/php7/conf.d/opcache_settings.ini
+COPY nextcloud.asc /srv/nextcloud.asc
+
+ARG NEXTCLOUD_VERSION
+
+RUN apk add --no-cache gnupg && \
+  curl -fLO "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" && \
+  curl -fLO "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2.asc" && \
+  gpg --import /srv/nextcloud.asc && \
+  gpg --verify "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2.asc" "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" && \
+  tar -C /srv -xjf "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" && \
+  rm "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2.asc" && \
+  apk del gnupg
 
 COPY config/* /srv/nextcloud/config/
 
@@ -58,10 +72,6 @@ RUN mkdir -p /srv/nextcloud/data && \
   chown -R apache:apache /srv/nextcloud/config && \
   chown -R apache:apache /srv/nextcloud/custom_apps && \
   chown -R apache:apache /srv/nextcloud/data
-
-COPY httpd.conf /etc/apache2/conf.d/overrides.conf
-COPY memory.ini /etc/php7/conf.d/memory_settings.ini
-COPY opcache.ini /etc/php7/conf.d/opcache_settings.ini
 
 WORKDIR /srv/nextcloud
 
