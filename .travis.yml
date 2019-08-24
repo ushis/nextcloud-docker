@@ -1,4 +1,6 @@
 ---
+language: generic
+
 sudo: false
 
 env:
@@ -8,12 +10,18 @@ env:
 services:
   - docker
 
+before_script:
+  - npm install -g snyk
+  - snyk auth "${SNYK_API_TOKEN}"
+
 script:
   - docker build --build-arg "NEXTCLOUD_VERSION=${NEXTCLOUD_VERSION}" -t nextcloud .
+  - snyk test --docker nextcloud
 
 before_deploy:
   - if test -n "${TRAVIS_TAG}"; then
-      docker tag nextcloud "ushi/nextcloud:${TRAVIS_TAG}";
+      docker tag nextcloud "ushi/nextcloud:${TRAVIS_TAG}" &&
+        snyk monitor --docker "ushi/nextcloud:${TRAVIS_TAG}";
     else
       docker tag nextcloud "ushi/nextcloud:latest";
     fi
