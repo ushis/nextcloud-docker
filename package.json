@@ -1,0 +1,9 @@
+{
+  "name": "nextcloud-docker",
+  "repository": "git@github.com:ushis/nextcloud-docker.git",
+  "author": "ushi. <ushi@honkgong.info>",
+  "license": "MIT",
+  "devDependencies": {
+    "snyk": "^1.228.5"
+  }
+}
