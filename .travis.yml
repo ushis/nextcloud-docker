@@ -1,12 +1,6 @@
 ---
 language: generic
 
-sudo: false
-
-env:
-  global:
-    - NEXTCLOUD_VERSION="$(<version)"
-
 services:
   - docker
 
@@ -15,7 +9,7 @@ before_script:
   - snyk auth "${SNYK_API_TOKEN}"
 
 script:
-  - docker build --build-arg "NEXTCLOUD_VERSION=${NEXTCLOUD_VERSION}" -t ushi/nextcloud .
+  - docker build --build-arg "NEXTCLOUD_VERSION=$(<version)" -t ushi/nextcloud .
   - snyk test --docker ushi/nextcloud
 
 before_deploy:
@@ -25,7 +19,7 @@ before_deploy:
     else
       docker tag ushi/nextcloud "ushi/nextcloud:latest";
     fi
-  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
 
 deploy:
   - provider: script
