@@ -5,17 +5,17 @@ services:
   - docker
 
 before_script:
-  - npm install -g snyk
-  - snyk auth "${SNYK_API_TOKEN}"
+  - yarn install
+  - yarn snyk auth "${SNYK_API_TOKEN}"
 
 script:
   - docker build --build-arg "NEXTCLOUD_VERSION=$(<version)" -t ushi/nextcloud .
-  - snyk test --docker ushi/nextcloud
+  - yarn snyk test --docker ushi/nextcloud
 
 before_deploy:
   - if test -n "${TRAVIS_TAG}"; then
       docker tag ushi/nextcloud "ushi/nextcloud:${TRAVIS_TAG}" &&
-        snyk monitor --docker "ushi/nextcloud:${TRAVIS_TAG}";
+        yarn snyk monitor --docker "ushi/nextcloud:${TRAVIS_TAG}";
     else
       docker tag ushi/nextcloud "ushi/nextcloud:latest";
     fi
