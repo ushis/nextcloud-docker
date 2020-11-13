@@ -1,0 +1,40 @@
+---
+name: workflow
+
+on:
+  - push
+  - pull_request
+
+env:
+  DOCKER_IMAGE: docker.pkg.github.com/ushis/nextcloud-docker/nextcloud
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@master
+      - name: build
+        run: |
+          docker build --build-arg "NEXTCLOUD_VERSION=$(<version)" -t "${DOCKER_IMAGE}:${GITHUB_SHA}" .
+      - name: push
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          docker login docker.pkg.github.com -u ushis -p "${GITHUB_TOKEN}"
+          docker push "${DOCKER_IMAGE}:${GITHUB_SHA}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build]
+    steps:
+      - name: release
+        run: |
+          docker login docker.pkg.github.com -u ushis -p "${GITHUB_TOKEN}"
+          docker pull "${DOCKER_IMAGE}:${GITHUB_SHA}"
+          docker tag "${DOCKER_IMAGE}:${GITHUB_SHA}" "${DOCKER_IMAGE}:${GITHUB_REF##*/}"
+          docker push "${DOCKER_IMAGE}:${GITHUB_REF##*/}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
