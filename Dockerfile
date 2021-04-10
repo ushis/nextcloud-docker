@@ -14,16 +14,19 @@ RUN apk add --no-cache \
   apache2 \
   ca-certificates \
   curl \
+  imagemagick \
   openssl \
   php7 \
   php7-apache2 \
   php7-apcu \
+  php7-bcmath \
   php7-bz2 \
   php7-ctype \
   php7-curl \
   php7-dom \
   php7-fileinfo \
   php7-gd \
+  php7-gmp \
   php7-iconv \
   php7-intl \
   php7-json \
