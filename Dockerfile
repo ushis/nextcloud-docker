@@ -50,6 +50,7 @@ RUN apk add --no-cache \
   php7-zlib
 
 COPY httpd.conf /etc/apache2/conf.d/overrides.conf
+COPY apcu.ini /etc/php7/conf.d/apcu.ini
 COPY memory.ini /etc/php7/conf.d/memory_settings.ini
 COPY opcache.ini /etc/php7/conf.d/opcache_settings.ini
 COPY nextcloud.asc /srv/nextcloud.asc
